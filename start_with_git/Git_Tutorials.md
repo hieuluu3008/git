@@ -291,4 +291,74 @@ A---B---C (main)
 A---B---C-----M (main)
 ```
 
-3. Squash merge
+3. Squash merge:
+- Creates a single new commit on the target branch
+- Combines all changes from the source branch. Add a regular commit with one parent
+- Added to target branch (not feature branch). Doesn't preserve the detailed commit history of the source branch
+```bash
+git checkout main
+git merge --squash feature
+git commit -m "Add new feature"
+```
+- Before
+```css
+A---B---C (main)
+         \
+          D---E---F (feature)
+```
+- After
+```css
+A---B---C---G (main)
+         \
+          D---E---F (feature)
+```
+G = D -> F
+
+4. OCtopus merge
+- Merge three or more branches at once
+- Create a single merge commit with multiple parents
+- Best used when branch don't conflict with each other
+```bash
+git checkout main
+git merge -s octopus feature1 feature2 feature3
+```
+- Before
+```css
+A---B (main)
+ \
+  C (feature1)
+   \
+    D (feature2)
+     \
+      E (feature3)
+```
+- After
+```css
+A---B------------M (main)
+ \   \    \     /
+  C   D    E--- (feature1, feature2, feature3)
+```
+#### Rebase
+```bash
+git rebase <branch_name>
+```
+A command in Git used to move or copy an entire sequence of commits from one branch onto the tip of another branch, as if those commits were originally made from the new base.
+- Before
+```css
+A---B---C---F (main)
+         \
+          D---E (feature)
+```
+- Run rebase
+```bash
+git checkout feature
+git rebase main
+```
+- After
+```css
+A---B---C---F---D'---E' (feature)
+```
+* Interactive rebase
+```bash
+git rebase -i <commit_hash>
+```
