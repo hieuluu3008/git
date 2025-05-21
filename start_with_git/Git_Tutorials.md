@@ -249,7 +249,7 @@ git push origin main
 ```
 ### Merge
 #### Merge types
-* Fast forward merge:
+1. Fast forward merge:
 A fast-forward merge is a type of merge in Git that occurs when the current branch has no new commits since it diverged from the branch being merged. In this case, Git does not create a new merge commit — it simply moves the pointer of the current branch forward to match the other branch.
 ```bash
 git checkout main
@@ -258,7 +258,7 @@ git merge feature_branch
 Forge git merge fast forward
 ```bash
 git checkout main
-git merge feature_branch --ff-only
+git merge --ff-only feature_branch
 ```
 - Before
 ```css
@@ -270,3 +270,25 @@ A---B---C (main)
 ```css
 A---B---C---D---E (main, feature)
 ```
+
+2. Recursive merge:
+- Recursive merge is the default merge strategy in Git, used when two branches have made separate commits after diverging from a common ancestor.
+- When you merge two branches that cannot be fast-forwarded, Git uses the recursive strategy to automatically analyze and combine changes from both branches.
+```bash
+git checkout main
+git merge --no-ff feature_branch
+```
+- Before
+```css
+       D---E (feature)
+      /
+A---B---C (main)
+```
+- After
+```css
+       D---E
+      /     \
+A---B---C-----M (main)
+```
+
+3. Squash merge
