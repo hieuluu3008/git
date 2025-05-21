@@ -196,6 +196,8 @@ git merge order
 nano order
 ```
 
+
+
 ### Remotes
 Remote repo - a repo stored in the cloud through an online repo hosting service such as GitHub.
 * Clone a repo
@@ -244,4 +246,27 @@ git push remote local_branch
 * Push changes into `origin` from local `main` branch
 ```bash
 git push origin main
+```
+### Merge
+#### Merge types
+* Fast forward merge:
+A fast-forward merge is a type of merge in Git that occurs when the current branch has no new commits since it diverged from the branch being merged. In this case, Git does not create a new merge commit — it simply moves the pointer of the current branch forward to match the other branch.
+```bash
+git checkout main
+git merge feature_branch
+```
+Forge git merge fast forward
+```bash
+git checkout main
+git merge feature_branch --ff-only
+```
+- Before
+```css
+A---B---C (main)
+         \
+          D---E (feature)
+```
+- After
+```css
+A---B---C---D---E (main, feature)
 ```
