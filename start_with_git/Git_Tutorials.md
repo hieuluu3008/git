@@ -359,6 +359,115 @@ git rebase main
 A---B---C---F---D'---E' (feature)
 ```
 * Interactive rebase
+Edit multiple commits in history at one time
 ```bash
 git rebase -i <commit_hash>
 ```
+- Before
+```bash
+$ git log --online data-validation
+abc1234 Optimize validation performance
+def5678 Fix validation bug
+ghi9101 Add data validation function
+xyz1234 New Main Branch Commit
+VWX7890 Main Branch Commit
+jk12345 Initial commit
+```
+- Modify last 3 commits
+```bash
+git rebase -i HEAD~3
+```
+- Squash these three commits into one commit using the base cmd `pick` and `fixup`
+- - `pick` keep the commit
+- - `fixup` combine the commit with prev pick commit
+```bash
+$ git rebase -i HEAD~3
+pick ghi9101 Add data validation function
+fixup def5678 Fix validation bug
+fixup abc1234 Optimize validation performance
+```
+- After
+```bash
+$ git log --online data-validation
+mno6789 Add data validation function
+xyz1234 New Main Branch Commit
+VWX7890 Main Branch Commit
+jk12345 Initial commit
+```
+### Cherry-Pick
+A command that copies a specific commit from one branch and applies it to another.
+* Single Commit
+```bash
+git cherry-pick <commit-hash>
+```
+Example: <br>
+Before
+```css
+A---B---C---D---E  (main)
+         \
+          F---G   (feature)
+```
+Cherry-pick
+```bash
+git checkout main
+git cherry-pick G
+```
+After
+```css
+A---B---C---D---E---G'  (main)
+         \
+          F---G         (feature)
+```
+* Multiple Commits
+```bash
+git cherry-pick <hash1> <hash2>
+```
+* With range
+```bash
+git cherry-pick <hash1>...<hash4>
+```
+#### Resolve cherry-pick conflict
+* Conflict resolution steps
+1. Manually edit conflict files
+2. Add resolved file to staging using
+```bash
+git add <resolved file>
+```
+3. Continue with the cherry-pick process by running --continue flag
+```bash
+git cherry-pick --continue
+```
+* Stop a cherry-pick
+```bash
+git cherry-pick --abort
+```
+
+### Bisect
+A tool that uses binary search to find the commit that introduced a bug.
+```bash
+git bisect
+```
+#### How to start
+Ex: You’ve discovered a bug in the current `HEAD` commit, but everything was working fine 10 days ago in commit `abc1234`.
+```bash
+git bisect start               # star bisect process
+git bisect bad                 # mark the current HEAD is bad (error)
+git bisect good abc1234        # mark the commit abc1234 is good (normal)
+```
+1. Git checks out a commit halfway between the specified good and bad commits
+2. Use testing process to verify whether a specific version is working as expected or if a bug exists
+3. 1. When the test fails and the bug exists, run `git bisect bad`. 
+3. 2. When the test passes, run `git bisect good`.
+4. Git selects the next commit to test until it finds the closest commit that introduced the bug, run `git bisect reset`
+
+#### Automate test
+```bash
+git bisect start
+git bisect bad
+git bisect good abc1234
+git bisect run ./test-script.sh
+```
+Trong đó `test-script.sh` là file shell script trả về:
+- Exit code `0` nếu pass
+- Exit code khác `0` nếu fail
+
