@@ -564,5 +564,60 @@ git worktree remove <path>
 A Git repo nested inside another repo  
 Separate version control and history  
 Submodule change does not affect main repo  
+#### Adding a submodule
+```bash
+git submodule add <repository link|dir> <path>
+```
+Ex: 
+```bash
+git submodule add https://github.com/hieuluu3008/git.git git/start_with_git
+```
+#### List Submodules
+```bash
+git submodule status
+```
+#### Update submodules
+Update submodule with the latest changes  
+There are several options:  
+1. Updates all submodules where the source code is on your `local` computer.
+```bash
+git submodule update --init
+```
+2. Updates all submodule where the source code is on a `remote` repo.
+```bash
+git submodule update --init --remote
+```
+3. Updates a specific submodules
+```bash
+git submodule update --init <path_to_submodule>
+```
+#### Remove submodule
+1. Deinitialize the submodule.
+```bash 
+git submodule deinit <submodule_name>
+```
+2. Remove the submodule from git repo index.
+```bash
+git rm <path>
+```
+#### Extract submodule from a large repo
+1. Copy all files that need to be in the new submodule repo into another folder outside the repo.
+2. Inside the new folder, create a new repository for the submodule:
+```bash
+git init
+```
+3. Use ```git filter-repo``` to extract the relevant files and history from the main project:
+```bash
+git filter-repo --path <extract_path> --invert-paths
+```
+4. Add the extracted repository as a submodule to the main project:
+```bash
+git submodule add <new_sub_path> <path_to_store_sub>
+```
+### Git Large File Storage (LFS)
+...
 
+### Trunk Based Development (TBD)
+A source control branching model where developers collaborate on code in a single branch called 'trunk' or 'main'.  
+Instead of pushing dev branches to different release branches, developers push their changes directly to the main branch  
 
