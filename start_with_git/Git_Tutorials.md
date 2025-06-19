@@ -471,3 +471,98 @@ Trong đó `test-script.sh` là file shell script trả về:
 - Exit code `0` nếu pass
 - Exit code khác `0` nếu fail
 
+### Git Filter Repo
+A tool for rewriting Git repository history quickly and safely
+```bash
+git filter-repo
+```
+#### Filter-Repo process
+1. Install git filter-repo
+```bash
+pip install git-filter-repo
+```
+2. Remove secrets.txt from every commit
+```bash
+git filter-repo --path secrets.txt --invert-paths --force
+/*
+--path: speccifies which paths to operate on
+--invert-paths: operate on all paths except the ones specified in --path
+*/
+```
+
+### Git reflog
+- A log of all reference updates in our local repository.
+- A git reference can be a pointer to a specific commit, a branch, a tag, or the HEAD pointer. 
+- The reflog data is stored in the .git/logs/refs/heads/ directory.
+
+| Feature         | `git reflog`                                          | `git log`                                                  |
+| ----------------| ----------------------------------------------------- | ---------------------------------------------------------- |
+| Purpose         | Shows reference updates and rewrites in local repo    | Shows commit history only                                  |
+| Scope           | Local repo only                                       | Local and remote repo                                      |
+| Content         | All ref updates (commits, resets, merges, etc.)       | Only commits                                               |
+| Persistence     | Temporary (usually 90 days)                           | Permanent (part of repository history)                     |
+| Use Case        | Recovering lost commits, understanding recent actions | Viewing project history, understanding feature development |            
+
+* Display log data and HEAD activity
+```bash
+git reflog
+git reflog show
+```
+* Clean up old log or unreachable entries
+```bash
+git reflog expire
+```
+* Filtering
+```bash
+git reflog --since/until= "1 week ago"
+```
+* Recover deleted branch
+```sql
+git reflog -- Identify the hash
+git checkout <hash> -- move HEAD to the hash of delete branch
+git checkout -b <branch-name> -- Create a new branch
+```
+
+### Git reset
+| Reset Type      | Command                        | Effect on Working Directory      | Effect on Staging Area    |
+| ----------------| ------------------------------ | -------------------------------- | ------------------------- |
+| Soft            | `git reset --soft <commit>`    | No changes                       | Changes remain staged     |
+| Mixed (Default) | `git reset --mixed <commit>`   | No changes                       | Changes are unstaged      |
+| Hard            | `git reset --hard <commit>`    | Changes are discarded            | Changes are discarded     |
+
+### Git Worktrees
+```bash
+git worktree
+```
+- "checkout" multiple branches in your workspace.
+- Similar to a repo checkout, but efficient.
+- No need for stashing changes.
+- No need to switch between branches during development.
+
+#### Git Worktree vs Git Switch
+| Git Worktree               | Git Switch                     | 
+| ---------------------------| ------------------------------ |
+| Multiple active branches   | Only active branch at a time   |
+| Separate directories       | Single working directory       | 
+| No need to stash changes   | May require stashing           |
+
+#### Create a Git Worktree
+```bash
+git worktree add <path> <branch>
+```
+
+List all active worktrees
+```bash
+git worktree list
+```
+Remove a worktree
+```bash
+git worktree remove <path>
+```
+
+### Git Submodules
+A Git repo nested inside another repo  
+Separate version control and history  
+Submodule change does not affect main repo  
+
+
